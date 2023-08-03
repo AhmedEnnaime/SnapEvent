@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "github.com/AhmedEnnaime/SnapEvent/pb";
+
+package pb;
+
+service User {
+    // Advanced use when using stream, you can switch to GetUsersResponse for simple usecase
+    rpc GetUsers(GetUsersRequest) returns (stream GetUserResponse);
+
+    rpc GetUser(GetSingleUser) returns (GetUserResponse);
+
+    rpc CreateUser() returns ();
+}
+
+message GetUsersRequest {}
+
+message GetSingleUser {
+    int32 id = 1;
+}
+
+message GetUserResponse {
+    int32 id = 1;
+    string name = 2;
+    string birthday = 3;
+    string email = 4;
+    string password = 5;
+    GENDER gender = 6;
+}
+
+message GetUsersResponse {
+    repeated GetUserResponse users = 1;
+}
+
+enum GENDER {
+    MALE = 0;
+    FEMALE = 1;
+}

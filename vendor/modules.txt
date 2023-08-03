@@ -1,0 +1,14 @@
+# github.com/golang/protobuf v1.5.3
+## explicit; go 1.9
+# golang.org/x/net v0.13.0
+## explicit; go 1.17
+# golang.org/x/sys v0.10.0
+## explicit; go 1.17
+# golang.org/x/text v0.11.0
+## explicit; go 1.17
+# google.golang.org/genproto/googleapis/rpc v0.0.0-20230803162519-f966b187b2e5
+## explicit; go 1.19
+# google.golang.org/grpc v1.57.0
+## explicit; go 1.17
+# google.golang.org/protobuf v1.31.0
+## explicit; go 1.11
