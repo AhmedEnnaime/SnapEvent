@@ -9,7 +9,7 @@ service UserService {
     // Advanced use when using stream, you can switch to GetUsersResponse for simple usecase
     rpc GetUsers(GetUsersRequest) returns (stream User);
 
-    rpc GetUser(GetUserId) returns (UserResponse);
+    rpc GetUserById(GetUserId) returns (UserResponse);
 
     rpc CreateUser(CreateUserRequest) returns (UserResponse);
 
