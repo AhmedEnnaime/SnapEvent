@@ -2,25 +2,14 @@ package db
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/configs"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
-var DB *sqlx.DB
+func ConnectDB(config *configs.Config) *sqlx.DB {
 
-func ConnectDB() *sqlx.DB {
-	config, err := configs.LoadConfig("../../app.env")
-
-	if err != nil {
-		log.Fatal("Could not load environment variables", err)
-	}
-	DB = getConnection(&config)
-	return DB
-}
-
-func getConnection(config *configs.Config) *sqlx.DB {
 	var dbConnectionStr string
 
 	dbConnectionStr = fmt.Sprintf(
