@@ -11,6 +11,8 @@ services:
     container_name: snapevent_app
     env_file:
       - ".env"
+    environment:
+      - CONFIG_PATH=/app/
     ports:
       - "9090:9090"
     depends_on:

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/configs"
@@ -21,7 +22,12 @@ var (
 )
 
 func init() {
-	config, err := configs.LoadConfig("..")
+	configPath := os.Getenv("CONFIG_PATH")
+    if configPath == "" {
+        log.Fatal("CONFIG_PATH environment variable is not set")
+    }
+
+	config, err := configs.LoadConfig(configPath)
 
 	if err != nil {
 		log.Fatal("Could not load environment variables ", err)
@@ -29,11 +35,11 @@ func init() {
 
 	ctx = context.TODO()
 
-	DB := db.ConnectDB(&config)
+	DB = db.ConnectDB(&config)
 
-	if DB != nil {
-		log.Fatal("Failed to connect to the database")
-	}
+	if DB == nil {
+        log.Fatalf("Failed to connect to the database: %v", err) // Print detailed error message
+    }
 
 	fmt.Println("Connected to postgres successfully")
 
@@ -41,7 +47,12 @@ func init() {
 }
 
 func main() {
-	config, err := configs.LoadConfig("..")
+	configPath := os.Getenv("CONFIG_PATH")
+    if configPath == "" {
+        log.Fatal("CONFIG_PATH environment variable is not set")
+    }
+
+	config, err := configs.LoadConfig(configPath)
 
 	if err != nil {
 		log.Fatal("Could not load config", err)
