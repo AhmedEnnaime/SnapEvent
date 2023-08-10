@@ -6,65 +6,81 @@ option go_package = "github.com/AhmedEnnaime/SnapEvent/pb";
 import "google/protobuf/timestamp.proto";
 
 service UserService {
-    // Advanced use when using stream, you can switch to GetUsersResponse for simple usecase
-    rpc GetUsers(GetUsersRequest) returns (stream User);
+  // Advanced use when using stream, you can switch to GetUsersResponse for
+  // simple usecase
+  rpc GetUsers(GetUsersRequest) returns (stream User);
 
-    rpc GetUserById(GetUserId) returns (UserResponse);
+  rpc GetUserById(GetUserId) returns (UserResponse);
 
-    rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
 
-    rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
 
-    rpc DeleteUser(GetUserId) returns (DeleteUserResponse);
+  rpc DeleteUser(GetUserId) returns (DeleteUserResponse);
+
+  rpc VerifyEmail(VerifyEmailRequest) returns (GenericResponse);
+
+  rpc SignInUser(SignInUserRequest) returns (SignInUserResponse);
 }
 
 message User {
-    int32 id = 1;
-    string name = 2;
-    string birthday = 3;
-    string email = 4;
-    string password = 5;
-    GENDER gender = 6;
-    google.protobuf.Timestamp created_at = 7;
-    google.protobuf.Timestamp updated_at = 8;
+  int32 id = 1;
+  string name = 2;
+  string birthday = 3;
+  string email = 4;
+  string password = 5;
+  GENDER gender = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
 }
 
 message GetUsersRequest {
-    int64 page = 1;
-    int64 limit = 2;
+  int64 page = 1;
+  int64 limit = 2;
 }
 
-message UserResponse {
-    User user = 1;
-}
+message UserResponse { User user = 1; }
 
-message GetUserId {
-    int32 id = 1;
-}
+message GetUserId { int32 id = 1; }
 
 message CreateUserRequest {
-    string name = 1;
-    string birthday = 2;
-    string email = 3;
-    string password = 4;
-    GENDER gender = 5;
+  string name = 1;
+  string birthday = 2;
+  string email = 3;
+  string password = 4;
+  GENDER gender = 5;
 }
-
 
 message UpdateUserRequest {
-    int32 id =1;
-    string name = 2;
-    string birthday = 3;
-    string email = 4;
-    string password = 5;
-    GENDER gender = 6;
+  int32 id = 1;
+  string name = 2;
+  string birthday = 3;
+  string email = 4;
+  string password = 5;
+  GENDER gender = 6;
 }
 
-message DeleteUserResponse {
-    bool success = 1;
+message DeleteUserResponse { bool success = 1; }
+
+message VerifyEmailRequest { string verificationCode = 1; }
+
+message SignInUserRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message SignInUserResponse {
+  string status = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message GenericResponse {
+  string status = 1;
+  string message = 2;
 }
 
 enum GENDER {
-    MALE = 0;
-    FEMALE = 1;
+  MALE = 0;
+  FEMALE = 1;
 }

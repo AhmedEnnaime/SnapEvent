@@ -6,71 +6,65 @@ option go_package = "github.com/AhmedEnnaime/SnapEvent/pb";
 import "google/protobuf/timestamp.proto";
 
 service EventService {
-    
-    rpc GetEvents (GetEventsRequest) returns (stream Event);
 
-    rpc GetEventById (GetEventId) returns (EventResponse);
+  rpc GetEvents(GetEventsRequest) returns (stream Event);
 
-    rpc CreateEvent (CreateEventRequest) returns (EventResponse);
+  rpc GetEventById(GetEventId) returns (EventResponse);
 
-    rpc UpdateEvent (UpdateEventRequest) returns (EventResponse);
+  rpc CreateEvent(CreateEventRequest) returns (EventResponse);
 
-    rpc DeleteEvent (GetEventId) returns (DeleteResponse);
+  rpc UpdateEvent(UpdateEventRequest) returns (EventResponse);
+
+  rpc DeleteEvent(GetEventId) returns (DeleteResponse);
 }
 
 message Event {
-    int32 id = 1;
-    string eventDate = 2;
-    string time = 3;
-    string description = 4;
-    string city = 5;
-    string location = 6;
-    int32 creator_id = 7;
-    STATUS status = 8;
-    google.protobuf.Timestamp created_at = 9;
-    google.protobuf.Timestamp updated_at = 10;
+  int32 id = 1;
+  string eventDate = 2;
+  string time = 3;
+  string description = 4;
+  string city = 5;
+  string location = 6;
+  int32 creator_id = 7;
+  STATUS status = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 
 message GetEventsRequest {
-    int64 page = 1;
-    int64 limit = 2;
+  int64 page = 1;
+  int64 limit = 2;
 }
 
-message GetEventId {
-    int32 id = 1;
-}
+message GetEventId { int32 id = 1; }
 
-message EventResponse {
-    Event event = 1;
-}
+message EventResponse { Event event = 1; }
 
 message CreateEventRequest {
-    string eventDate = 1;
-    string time = 2;
-    string description = 3;
-    string city = 4;
-    string location = 5;
-    int32 creator_id = 6;
-    STATUS status = 7;
+  string eventDate = 1;
+  string time = 2;
+  string description = 3;
+  string city = 4;
+  string location = 5;
+  int32 creator_id = 6;
+  STATUS status = 7;
 }
 
 message UpdateEventRequest {
-    int32 id = 1;
-    string eventDate = 2;
-    string time = 3;
-    string description = 4;
-    string city = 5;
-    string location = 6;
-    int32 creator_id = 7;
-    STATUS status = 8;
+  int32 id = 1;
+  string eventDate = 2;
+  string time = 3;
+  string description = 4;
+  string city = 5;
+  string location = 6;
+  int32 creator_id = 7;
+  STATUS status = 8;
 }
 
-message DeleteResponse {
-    bool success = 1;
-}
+message DeleteResponse { bool success = 1; }
 
 enum STATUS {
-    OPEN = 0;
-    CLOSED = 1;
-    INVITE = 2;
+  OPEN = 0;
+  CLOSED = 1;
+  Invitation = 2;
 }

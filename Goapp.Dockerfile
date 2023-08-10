@@ -17,6 +17,6 @@ RUN addgroup --gid ${USER_ID} ${USERNAME}
 RUN adduser -disabled-password --gecos '' -uid ${USER_ID} --gid ${GROUP_ID} ${USERNAME}
 USER ${USERNAME}
 
-COPY internal/db/migration/*.sql /docker-entrypoint-initdb.d/
+# COPY internal/db/migration/*.sql /docker-entrypoint-initdb.d/
 
 CMD air

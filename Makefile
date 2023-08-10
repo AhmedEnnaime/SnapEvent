@@ -9,3 +9,9 @@ build:
 	
 down:
 	docker-compose down
+
+clean:
+	rm pb/*.go
+
+test:
+	go test -cover -race ./... 
