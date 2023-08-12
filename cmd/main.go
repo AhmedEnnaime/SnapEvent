@@ -35,6 +35,10 @@ func init() {
         log.Fatalf("Failed to perform database migrations: %v", err)
     }
 
+	if err := db.Seed(DB); err != nil {
+		log.Fatalf("Failed to seed: %v", err)
+	}
+
 	fmt.Println("Connected to postgres successfully")
 
 	server = gin.Default()

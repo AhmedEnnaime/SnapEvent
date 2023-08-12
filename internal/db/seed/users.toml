@@ -1,0 +1,17 @@
+[[users]]
+  name = "foo"
+  birthday = "2002-04-19"
+  email = "foo@example.com"
+  password = "xxxxxx"
+  gender = "Male"
+  created_at = 1979-05-27T07:32:00
+  updated_at = 1979-05-27T07:32:00
+
+[[users]]
+  name = "bar"
+  birthday = "1999-04-19"
+  email = "bar@example.com"
+  password = "yyyyyy"
+  gender = "Female"
+  created_at = 1979-05-27T07:32:00
+  updated_at = 1979-05-27T07:32:00

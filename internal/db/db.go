@@ -10,6 +10,7 @@ import (
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/configs"
 	"github.com/AhmedEnnaime/SnapEvent/internal/models"
+	"github.com/BurntSushi/toml"
 	"github.com/DATA-DOG/go-txdb"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
@@ -125,4 +126,27 @@ func AutoMigrate(db *gorm.DB) error {
 	}
 	return nil
 	
+}
+
+func Seed(db *gorm.DB) error {
+	users := struct {
+		Users []models.User
+	}{}
+
+	bs, err := os.ReadFile("internal/db/seed/users.toml")
+	if err != nil {
+		return err
+	}
+
+	if _, err := toml.Decode(string(bs), &users); err != nil {
+		return err
+	}
+
+	for _, u := range users.Users {
+		if err := db.Create(&u).Error; err != nil {
+			return err
+		}
+	}
+	
+	return nil
 }
