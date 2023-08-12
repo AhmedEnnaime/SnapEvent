@@ -25,10 +25,11 @@ message Event {
   string description = 4;
   string city = 5;
   string location = 6;
-  int32 creator_id = 7;
-  STATUS status = 8;
-  google.protobuf.Timestamp created_at = 9;
-  google.protobuf.Timestamp updated_at = 10;
+  string poster = 7;
+  int32 creator_id = 8;
+  STATUS status = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
 message GetEventsRequest {
@@ -46,8 +47,9 @@ message CreateEventRequest {
   string description = 3;
   string city = 4;
   string location = 5;
-  int32 creator_id = 6;
-  STATUS status = 7;
+  string poster = 6;
+  int32 creator_id = 7;
+  STATUS status = 8;
 }
 
 message UpdateEventRequest {
@@ -57,8 +59,9 @@ message UpdateEventRequest {
   string description = 4;
   string city = 5;
   string location = 6;
-  int32 creator_id = 7;
-  STATUS status = 8;
+  string poster = 7;
+  int32 creator_id = 8;
+  STATUS status = 9;
 }
 
 message DeleteResponse { bool success = 1; }

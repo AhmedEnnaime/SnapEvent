@@ -22,6 +22,7 @@ type Event struct {
 	Description string `json:"description" gorm:"not null"`
 	City string `json:"city" gorm:"not null"`
 	Location string `json:"location" gorm:"not null"`
+	Poster string `json:"poster"`
 	Status STATUS `json:"status" gorm:"not null"`
 	UserID uint `json:"user_id" gorm:"not null"`
 	User User `gorm:"foreignkey:UserId"`
