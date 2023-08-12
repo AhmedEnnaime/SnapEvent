@@ -1,24 +1,24 @@
 version: "3.8"
 services:
-  app:
+  server:
     build: 
       args:
         - USER_ID=1000
         - GROUP_ID=1000
         - USERNAME=ahmed
       context: .
-      dockerfile: Goapp.Dockerfile
-    container_name: snapevent_app
+      dockerfile: Server.Dockerfile
+    container_name: snapevent_server
     env_file:
       - ".env"
     environment:
-      - CONFIG_PATH=/app/
+      - CONFIG_PATH=/server/
     ports:
       - "9090:9090"
     depends_on:
       - db
     volumes:
-      - ./:/app
+      - ./:/server
     links:
       - db  
   db:
