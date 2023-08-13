@@ -14,22 +14,22 @@ import (
 type GENDER string
 
 const (
-    Male GENDER = "Male"
-    Female GENDER = "Female"
+	Male   GENDER = "Male"
+	Female GENDER = "Female"
 )
-
 
 type User struct {
 	gorm.Model
-	Name string `json:"name" gorm:"not null"`
-	Birthday         time.Time    `json:"birthday" gorm:"not null"`
-	Email            string    `json:"email" gorm:"unique_index;not null"`
-	Password         string    `json:"password" gorm:"not null"`
-	Gender         GENDER    `json:"gender" gorm:"not null"`
-	Events []Event `gorm:"many2many:user_events;"`
+	Name          string    `json:"name" gorm:"not null"`
+	Birthday      time.Time `json:"birthday" gorm:"not null"`
+	Email         string    `json:"email" gorm:"unique_index;not null"`
+	Password      string    `json:"password" gorm:"not null"`
+	Gender        GENDER    `json:"gender" gorm:"not null"`
+	CreatedEvents []Event   `gorm:"foreignkey:UserID"`
+	Events        []Event   `gorm:"many2many:user_events;"`
 }
 
-func (u User) Validate() error  {
+func (u User) Validate() error {
 	return validation.ValidateStruct(&u,
 		validation.Field(
 			&u.Name,
@@ -71,10 +71,10 @@ func HashPassword(u *User) error {
 	u.Password = string(h)
 
 	return nil
-	
+
 }
 
-func (u *User) CheckPassword(plain string) bool  {
+func (u *User) CheckPassword(plain string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(plain))
 	return err == nil
 }

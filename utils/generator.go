@@ -9,7 +9,7 @@ func NewUser() *pb.User {
 
 	user := &pb.User{
 		Name:     randomUserName(),
-		Birthday: timestamppb.New(randomDate()),
+		Birthday: timestamppb.New(randomPastDate()),
 		Email:    randomUserEmail(),
 		Password: randomUserPassword(),
 		Gender:   randomUserGender(),
@@ -20,7 +20,7 @@ func NewUser() *pb.User {
 
 func NewEvent() *pb.Event {
 	event := &pb.Event{
-		EventDate:   timestamppb.New(randomDate()),
+		EventDate:   timestamppb.New(randomFutureDate()),
 		Time:        randomEventTime(),
 		Description: randomDescription(),
 		City:        randomCity(),
@@ -35,7 +35,7 @@ func NewEvent() *pb.Event {
 func NewInvite() *pb.Invite {
 	invite := &pb.Invite{
 		UserId:  randomEntityId(),
-		EventId: randomEntityId(),
+		EventId: 3,
 		Type:    randomInviteType(),
 	}
 	return invite

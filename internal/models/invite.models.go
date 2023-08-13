@@ -3,26 +3,34 @@ package models
 import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/jinzhu/gorm"
-) 
+)
 
 type TYPE string
+type APPROVAL string
 
 const (
-    Attendee TYPE = "Attendee"
-    Vip TYPE = "Vip"
+	Attendee TYPE = "Attendee"
+	Vip      TYPE = "Vip"
+)
+
+const (
+	Pending APPROVAL = "Pending"
+	Accept  APPROVAL = "Accept"
+	Decline APPROVAL = "Decline"
 )
 
 type Invite struct {
 	gorm.Model
-	UserID uint `json:"user_id" gorm:"not null"`
-	User User `gorm:"foreignkey:UserId"`
-	EventID uint `json:"event_id" gorm:"not null"`
-	Event User `gorm:"foreignkey:EventId"`
-	Type TYPE `gorm:"not null"`
+	UserID   uint     `json:"user_id" gorm:"not null"`
+	User     User     `gorm:"foreignkey:UserId"`
+	EventID  uint     `json:"event_id" gorm:"not null"`
+	Event    User     `gorm:"foreignkey:EventId"`
+	Type     TYPE     `gorm:"not null"`
+	Approval APPROVAL `json:"approval" gorm:"not null;default:'Pending'"`
 }
 
 func (i Invite) Validate() error {
-	return validation.ValidateStruct(&i, 
+	return validation.ValidateStruct(&i,
 		validation.Field(
 			&i.UserID,
 			validation.Required,
@@ -36,6 +44,9 @@ func (i Invite) Validate() error {
 			validation.Required,
 			validation.In("Attendee", "Vip"),
 		),
-	
+		validation.Field(
+			&i.Approval,
+			validation.In("Pending", "Accept", "Decline"),
+		),
 	)
 }

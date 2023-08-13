@@ -1,0 +1,30 @@
+[[events]]
+  eventDate = 2023-10-19T07:32:00
+  time = "10:00"
+  description = "Enjoy your day with this event"
+  city = "Rabat"
+  location = "Agdal"
+  poster = "https://www.google.com/"
+  user_id = 3
+  status = "Open"
+
+
+[[events]]
+  eventDate = 2023-12-09T07:32:00
+  time = "21:00"
+  description = "Don't be late you're welcome"
+  city = "Safi"
+  location = "Place Moulay Youssef"
+  poster = "https://www.youtube.com/"
+  user_id = 2
+  status = "Closed"
+
+[[events]]
+  eventDate = 2024-02-12T07:32:00
+  time = "1:00"
+  description = "we're waiting for you bring your friends and enjoy with them"
+  city = "Ifrane"
+  location = "Boulevard"
+  poster = "https://www.linkedin.com/feed/"
+  user_id = 1
+  status = "Invitation"

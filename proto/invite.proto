@@ -23,8 +23,9 @@ message Invite {
   int32 user_id = 2;
   int32 event_id = 3;
   TYPE type = 4;
-  google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp updated_at = 6;
+  APPROVAL approval = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }
 
 message GetInvitesRequest {
@@ -40,6 +41,7 @@ message CreateIviteRequest {
   int32 user_id = 1;
   int32 event_id = 2;
   TYPE type = 3;
+  APPROVAL approval = 4;
 }
 
 message UpdateInviteRequest {
@@ -47,6 +49,7 @@ message UpdateInviteRequest {
   int32 user_id = 2;
   int32 event_id = 3;
   TYPE type = 4;
+  APPROVAL approval = 5;
 }
 
 message DeleteInviteResponse { bool success = 1; }
@@ -54,4 +57,10 @@ message DeleteInviteResponse { bool success = 1; }
 enum TYPE {
   ATTENDEE = 0;
   VIP = 1;
+}
+
+enum APPROVAL {
+  PENDING = 0;
+  ACCEPT = 1;
+  DECLINE = 2;
 }

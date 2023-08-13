@@ -25,7 +25,7 @@ func randomUserName() string {
 
 }
 
-func randomDate() time.Time {
+func randomPastDate() time.Time {
 	today := time.Now()
 
 	// Generate a random number of days in the past
@@ -33,6 +33,18 @@ func randomDate() time.Time {
 
 	// Calculate the random past date
 	randomDate := today.AddDate(0, 0, -randomDays)
+
+	return randomDate
+}
+
+func randomFutureDate() time.Time {
+	today := time.Now()
+
+	// Generate a random number of days in the future
+	randomDays := rand.Intn(365) // You can adjust the range as needed
+
+	// Calculate the random future date
+	randomDate := today.AddDate(0, 0, randomDays)
 
 	return randomDate
 }

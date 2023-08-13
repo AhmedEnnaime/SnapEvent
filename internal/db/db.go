@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -23,18 +25,18 @@ var mutex sync.Mutex
 func dsn() (string, error) {
 
 	configPath := os.Getenv("CONFIG_PATH")
-    if configPath == "" {
-        log.Fatal("CONFIG_PATH environment variable is not set")
-    }
+	if configPath == "" {
+		log.Fatal("CONFIG_PATH environment variable is not set")
+	}
 	configuration, err := configs.LoadConfig(configPath)
 
 	if err != nil {
 		return "Cannot load env variables", err
 	}
-	
+
 	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-    configuration.DbHost, configuration.DbPort, configuration.PostgresUser, configuration.PostgresPassword, configuration.PostgresDb), nil
-	
+		configuration.DbHost, configuration.DbPort, configuration.PostgresUser, configuration.PostgresPassword, configuration.PostgresDb), nil
+
 }
 
 func New() (*gorm.DB, error) {
@@ -50,7 +52,7 @@ func New() (*gorm.DB, error) {
 			break
 		}
 		time.Sleep(1 * time.Second)
-		
+
 	}
 
 	if err != nil {
@@ -60,21 +62,21 @@ func New() (*gorm.DB, error) {
 	d.DB().SetMaxIdleConns(3)
 	d.LogMode(false)
 	return d, nil
-	
+
 }
 
 // For test purposes => Creating isolated db connection for testing
-func NewTestDbB() (*gorm.DB, error)  {
+func NewTestDbB() (*gorm.DB, error) {
 	configPath := os.Getenv("CONFIG_PATH")
-    if configPath == "" {
-        log.Fatal("CONFIG_PATH environment variable is not set")
-    }
+	if configPath == "" {
+		log.Fatal("CONFIG_PATH environment variable is not set")
+	}
 	_, err := configs.LoadConfig(configPath)
 
 	if err != nil {
 		return nil, err
 	}
-	
+
 	s, err := dsn()
 
 	if err != nil {
@@ -88,7 +90,7 @@ func NewTestDbB() (*gorm.DB, error)  {
 			return nil, err
 		}
 		AutoMigrate(_d)
-		txdb.Register("txdb","postgres", s)
+		txdb.Register("txdb", "postgres", s)
 		txdbInitialized = true
 	}
 	mutex.Unlock()
@@ -125,28 +127,59 @@ func AutoMigrate(db *gorm.DB) error {
 		return err
 	}
 	return nil
-	
+
 }
 
 func Seed(db *gorm.DB) error {
-	users := struct {
-		Users []models.User
-	}{}
+	data := struct {
+		Users   []models.User
+		Events  []models.Event
+		Invites []models.Invite
+	}{
+		Users:   []models.User{},
+		Events:  []models.Event{},
+		Invites: []models.Invite{},
+	}
 
-	bs, err := os.ReadFile("internal/db/seed/users.toml")
+	files, err := os.ReadDir("internal/db/seed")
 	if err != nil {
 		return err
 	}
 
-	if _, err := toml.Decode(string(bs), &users); err != nil {
-		return err
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".toml") {
+			bs, err := os.ReadFile(filepath.Join("internal/db/seed", file.Name()))
+			if err != nil {
+				return err
+			}
+			if _, err := toml.Decode(string(bs), &data); err != nil {
+				return err
+			}
+		}
 	}
 
-	for _, u := range users.Users {
+	fmt.Printf("Decoded Users: %#v\n", data.Users)
+	fmt.Printf("Decoded Events: %#v\n", data.Events)
+	fmt.Printf("Decoded Invites: %#v\n", data.Invites)
+
+	for _, u := range data.Users {
 		if err := db.Create(&u).Error; err != nil {
 			return err
 		}
 	}
-	
+
+	for _, e := range data.Events {
+		fmt.Printf("Creating Event: %+v\n", e)
+		if err := db.Create(&e).Error; err != nil {
+			return err
+		}
+	}
+
+	for _, i := range data.Invites {
+		if err := db.Create(&i).Error; err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
