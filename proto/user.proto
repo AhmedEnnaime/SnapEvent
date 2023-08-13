@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "github.com/AhmedEnnaime/SnapEvent/pb";
+option go_package = ".;pb";
 import "google/protobuf/timestamp.proto";
 
 service UserService {
@@ -26,12 +26,13 @@ service UserService {
 message User {
   int32 id = 1;
   string name = 2;
-  string birthday = 3;
+  google.protobuf.Timestamp birthday = 3;
   string email = 4;
   string password = 5;
   GENDER gender = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp updated_at = 8;
+  repeated int32 event_ids = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
 }
 
 message GetUsersRequest {
@@ -45,7 +46,7 @@ message GetUserId { int32 id = 1; }
 
 message CreateUserRequest {
   string name = 1;
-  string birthday = 2;
+  google.protobuf.Timestamp birthday = 2;
   string email = 3;
   string password = 4;
   GENDER gender = 5;
@@ -54,7 +55,7 @@ message CreateUserRequest {
 message UpdateUserRequest {
   int32 id = 1;
   string name = 2;
-  string birthday = 3;
+  google.protobuf.Timestamp birthday = 3;
   string email = 4;
   string password = 5;
   GENDER gender = 6;

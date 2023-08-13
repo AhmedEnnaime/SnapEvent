@@ -17,8 +17,8 @@ const (
 
 type Event struct {
 	gorm.Model
-	EventDate string `json:"event_date" gorm:"not null"`
-	Time time.Time `json:"time" gorm:"not null"`
+	EventDate time.Time `json:"event_date" gorm:"not null"`
+	Time string `json:"time" gorm:"not null"`
 	Description string `json:"description" gorm:"not null"`
 	City string `json:"city" gorm:"not null"`
 	Location string `json:"location" gorm:"not null"`

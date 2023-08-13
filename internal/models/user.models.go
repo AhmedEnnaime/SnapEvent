@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"regexp"
+	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
@@ -21,7 +22,7 @@ const (
 type User struct {
 	gorm.Model
 	Name string `json:"name" gorm:"not null"`
-	Birthday         string    `json:"birthday" gorm:"not null"`
+	Birthday         time.Time    `json:"birthday" gorm:"not null"`
 	Email            string    `json:"email" gorm:"unique_index;not null"`
 	Password         string    `json:"password" gorm:"not null"`
 	Gender         GENDER    `json:"gender" gorm:"not null"`
