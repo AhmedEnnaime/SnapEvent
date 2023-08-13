@@ -120,7 +120,6 @@ func AutoMigrate(db *gorm.DB) error {
 	err := db.AutoMigrate(
 		&models.User{},
 		&models.Event{},
-		&models.UserEvent{},
 		&models.Invite{},
 	).Error
 	if err != nil {

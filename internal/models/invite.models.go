@@ -22,9 +22,9 @@ const (
 type Invite struct {
 	gorm.Model
 	UserID   uint     `json:"user_id" gorm:"not null"`
-	User     User     `gorm:"foreignkey:UserId"`
+	User     User     `gorm:"foreignkey:UserID"`
 	EventID  uint     `json:"event_id" gorm:"not null"`
-	Event    User     `gorm:"foreignkey:EventId"`
+	Event    User     `gorm:"foreignkey:EventID"`
 	Type     TYPE     `gorm:"not null"`
 	Approval APPROVAL `json:"approval" gorm:"not null;default:'Pending'"`
 }
