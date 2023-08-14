@@ -12,7 +12,6 @@ import (
 
 var DB *gorm.DB
 
-
 func init() {
 
 	var bug error
@@ -20,12 +19,12 @@ func init() {
 	DB, bug = db.New()
 
 	if DB == nil {
-        log.Fatalf("Failed to connect to the database: %v", bug) // Print detailed error message
-    }
+		log.Fatalf("Failed to connect to the database: %v", bug) // Print detailed error message
+	}
 
 	if err := db.AutoMigrate(DB); err != nil {
-        log.Fatalf("Failed to perform database migrations: %v", err)
-    }
+		log.Fatalf("Failed to perform database migrations: %v", err)
+	}
 
 	if err := db.Seed(DB); err != nil {
 		log.Fatalf("Failed to seed: %v", err)
@@ -34,13 +33,12 @@ func init() {
 	fmt.Println("Connected to postgres successfully")
 }
 
-
-func main()  {
+func main() {
 
 	configPath := os.Getenv("CONFIG_PATH")
-    if configPath == "" {
-        log.Fatal("CONFIG_PATH environment variable is not set")
-    }
+	if configPath == "" {
+		log.Fatal("CONFIG_PATH environment variable is not set")
+	}
 
 	_, err := configs.LoadConfig(configPath)
 

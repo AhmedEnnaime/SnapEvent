@@ -6,7 +6,7 @@
   location = "Agdal"
   poster = "https://www.google.com/"
   user_id = 3
-  status = "Open"
+  status = "OPEN"
 
 
 [[events]]
@@ -17,7 +17,7 @@
   location = "Place Moulay Youssef"
   poster = "https://www.youtube.com/"
   user_id = 2
-  status = "Closed"
+  status = "CLOSED"
 
 [[events]]
   eventDate = 2024-02-12T07:32:00
@@ -27,4 +27,4 @@
   location = "Boulevard"
   poster = "https://www.linkedin.com/feed/"
   user_id = 1
-  status = "Invitation"
+  status = "INVITATION"

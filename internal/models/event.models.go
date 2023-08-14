@@ -10,9 +10,9 @@ import (
 type STATUS string
 
 const (
-	Open       STATUS = "Open"
-	Closed     STATUS = "Closed"
-	Invitation STATUS = "Invitation"
+	OPEN       STATUS = "OPEN"
+	CLOSED     STATUS = "CLOSED"
+	INVITATION STATUS = "INVITATION"
 )
 
 type Event struct {
@@ -55,7 +55,7 @@ func (e Event) Validate() error {
 		validation.Field(
 			&e.Status,
 			validation.Required,
-			validation.In("Open", "Closed", "Invitation"),
+			validation.In("OPEN", "CLOSED", "INVITATION"),
 		),
 		validation.Field(
 			&e.UserID,

@@ -24,13 +24,13 @@ service UserService {
 }
 
 message User {
-  int32 id = 1;
+  uint32 id = 1;
   string name = 2;
   google.protobuf.Timestamp birthday = 3;
   string email = 4;
   string password = 5;
   GENDER gender = 6;
-  repeated int32 event_ids = 7;
+  repeated uint32 event_ids = 7;
   google.protobuf.Timestamp created_at = 8;
   google.protobuf.Timestamp updated_at = 9;
 }
@@ -42,7 +42,7 @@ message GetUsersRequest {
 
 message UserResponse { User user = 1; }
 
-message GetUserId { int32 id = 1; }
+message GetUserId { uint32 id = 1; }
 
 message CreateUserRequest {
   string name = 1;
@@ -53,7 +53,7 @@ message CreateUserRequest {
 }
 
 message UpdateUserRequest {
-  int32 id = 1;
+  uint32 id = 1;
   string name = 2;
   google.protobuf.Timestamp birthday = 3;
   string email = 4;

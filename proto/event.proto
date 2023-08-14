@@ -19,16 +19,16 @@ service EventService {
 }
 
 message Event {
-  int32 id = 1;
+  uint32 id = 1;
   google.protobuf.Timestamp eventDate = 2;
   string time = 3;
   string description = 4;
   string city = 5;
   string location = 6;
   string poster = 7;
-  int32 creator_id = 8;
+  uint32 creator_id = 8;
   STATUS status = 9;
-  repeated int32 user_ids = 10;
+  repeated uint32 user_ids = 10;
   google.protobuf.Timestamp created_at = 11;
   google.protobuf.Timestamp updated_at = 12;
 }
@@ -38,7 +38,7 @@ message GetEventsRequest {
   int64 limit = 2;
 }
 
-message GetEventId { int32 id = 1; }
+message GetEventId { uint32 id = 1; }
 
 message EventResponse { Event event = 1; }
 
@@ -49,19 +49,19 @@ message CreateEventRequest {
   string city = 4;
   string location = 5;
   string poster = 6;
-  int32 creator_id = 7;
+  uint32 creator_id = 7;
   STATUS status = 8;
 }
 
 message UpdateEventRequest {
-  int32 id = 1;
+  uint32 id = 1;
   google.protobuf.Timestamp eventDate = 2;
   string time = 3;
   string description = 4;
   string city = 5;
   string location = 6;
   string poster = 7;
-  int32 creator_id = 8;
+  uint32 creator_id = 8;
   STATUS status = 9;
 }
 

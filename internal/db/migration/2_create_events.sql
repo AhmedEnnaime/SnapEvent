@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS events
     status      VARCHAR(128) NOT NULL,
     creator_id  INTEGER NOT NULL REFERENCES users(id),
     created_at  timestamptz NOT NULL DEFAULT Now(),
-    modified_at timestamptz NOT NULL DEFAULT Now()
+    updated_at timestamptz NOT NULL DEFAULT Now(),
+    deleted_at timestamptz 
 );

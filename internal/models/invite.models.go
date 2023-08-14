@@ -9,14 +9,14 @@ type TYPE string
 type APPROVAL string
 
 const (
-	Attendee TYPE = "Attendee"
-	Vip      TYPE = "Vip"
+	ATTENDEE TYPE = "ATTENDEE"
+	VIP      TYPE = "VIP"
 )
 
 const (
-	Pending APPROVAL = "Pending"
-	Accept  APPROVAL = "Accept"
-	Decline APPROVAL = "Decline"
+	PENDING APPROVAL = "PENDING"
+	ACCEPT  APPROVAL = "ACCEPT"
+	DECLINE APPROVAL = "DECLINE"
 )
 
 type Invite struct {
@@ -24,9 +24,9 @@ type Invite struct {
 	UserID   uint     `json:"user_id" gorm:"not null"`
 	User     User     `gorm:"foreignkey:UserID"`
 	EventID  uint     `json:"event_id" gorm:"not null"`
-	Event    User     `gorm:"foreignkey:EventID"`
+	Event    Event    `gorm:"foreignkey:EventID"`
 	Type     TYPE     `gorm:"not null"`
-	Approval APPROVAL `json:"approval" gorm:"not null;default:'Pending'"`
+	Approval APPROVAL `json:"approval" gorm:"not null;default:'PENDING'"`
 }
 
 func (i Invite) Validate() error {
@@ -42,11 +42,11 @@ func (i Invite) Validate() error {
 		validation.Field(
 			&i.Type,
 			validation.Required,
-			validation.In("Attendee", "Vip"),
+			validation.In("ATTENDEE", "VIP"),
 		),
 		validation.Field(
 			&i.Approval,
-			validation.In("Pending", "Accept", "Decline"),
+			validation.In("PENDING", "ACCEPT", "DECLINE"),
 		),
 	)
 }

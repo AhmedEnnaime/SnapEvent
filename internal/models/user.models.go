@@ -14,8 +14,8 @@ import (
 type GENDER string
 
 const (
-	Male   GENDER = "Male"
-	Female GENDER = "Female"
+	MALE   GENDER = "MALE"
+	FEMALE GENDER = "FEMALE"
 )
 
 type User struct {
@@ -53,7 +53,7 @@ func (u User) Validate() error {
 		validation.Field(
 			&u.Gender,
 			validation.Required,
-			validation.In("Female", "Male"),
+			validation.In("FEMALE", "MALE"),
 		),
 	)
 }

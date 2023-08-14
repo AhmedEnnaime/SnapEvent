@@ -6,7 +6,16 @@ import (
 	"time"
 
 	"github.com/AhmedEnnaime/SnapEvent/pb"
+	"github.com/google/uuid"
 )
+
+func init() {
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+}
+
+func randomID() uint {
+	return uint(uuid.New().ID())
+}
 
 func randomUserGender() pb.GENDER {
 	switch rand.Intn(2) {
@@ -78,7 +87,7 @@ func randomStatus() pb.STATUS {
 	}
 }
 
-func randomEntityId() int32 {
+func randomEntityId() uint32 {
 	switch rand.Intn(3) {
 	case 1:
 		return 1

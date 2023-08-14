@@ -1,14 +1,14 @@
 [[invites]]
   user_id = 2
   event_id = 3
-  type = "Attendee"
+  type = "ATTENDEE"
 
 [[invites]]
   user_id = 1
   event_id = 3
-  type = "Vip"
+  type = "VIP"
 
 [[invites]]
   user_id = 3
   event_id = 3
-  type = "Attendee"
+  type = "ATTENDEE"

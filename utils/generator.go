@@ -20,6 +20,7 @@ func NewUser() *pb.User {
 
 func NewEvent() *pb.Event {
 	event := &pb.Event{
+		Id:          uint32(randomID()),
 		EventDate:   timestamppb.New(randomFutureDate()),
 		Time:        randomEventTime(),
 		Description: randomDescription(),
