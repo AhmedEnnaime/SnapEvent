@@ -125,8 +125,15 @@ func AutoMigrate(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-	return nil
 
+	// Set foreign key constraints
+	db.Model(&models.Event{}).AddForeignKey("user_id", "users(ID)", "CASCADE", "CASCADE")
+	db.Model(&models.Invite{}).AddForeignKey("user_id", "users(ID)", "CASCADE", "CASCADE")
+	db.Model(&models.Invite{}).AddForeignKey("event_id", "events(ID)", "CASCADE", "CASCADE")
+	db.Table("user_events").AddForeignKey("user_id", "users(ID)", "CASCADE", "CASCADE")
+	db.Table("user_events").AddForeignKey("event_id", "events(ID)", "CASCADE", "CASCADE")
+
+	return nil
 }
 
 func Seed(db *gorm.DB) error {
@@ -157,10 +164,6 @@ func Seed(db *gorm.DB) error {
 		}
 	}
 
-	fmt.Printf("Decoded Users: %#v\n", data.Users)
-	fmt.Printf("Decoded Events: %#v\n", data.Events)
-	fmt.Printf("Decoded Invites: %#v\n", data.Invites)
-
 	for _, u := range data.Users {
 		if err := db.Create(&u).Error; err != nil {
 			return err
@@ -168,7 +171,6 @@ func Seed(db *gorm.DB) error {
 	}
 
 	for _, e := range data.Events {
-		fmt.Printf("Creating Event: %+v\n", e)
 		if err := db.Create(&e).Error; err != nil {
 			return err
 		}
