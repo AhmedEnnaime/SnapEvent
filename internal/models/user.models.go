@@ -58,7 +58,7 @@ func (u User) Validate() error {
 	)
 }
 
-func HashPassword(u *User) error {
+func (u *User) HashPassword() error {
 	if len(u.Password) == 0 {
 		return errors.New("password should not be empty")
 	}
