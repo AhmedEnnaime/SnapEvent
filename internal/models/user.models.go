@@ -2,8 +2,6 @@ package models
 
 import (
 	"errors"
-	"regexp"
-	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
@@ -11,22 +9,22 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type GENDER string
+// type GENDER string
 
-const (
-	MALE   GENDER = "MALE"
-	FEMALE GENDER = "FEMALE"
-)
+// const (
+// 	MALE   GENDER = "MALE"
+// 	FEMALE GENDER = "FEMALE"
+// )
 
 type User struct {
 	gorm.Model
-	Name          string    `json:"name" gorm:"not null"`
-	Birthday      time.Time `json:"birthday" gorm:"not null"`
-	Email         string    `json:"email" gorm:"unique_index;not null"`
-	Password      string    `json:"password" gorm:"not null"`
-	Gender        GENDER    `json:"gender" gorm:"not null"`
-	CreatedEvents []Event   `gorm:"foreignkey:UserID"`
-	Events        []Event   `gorm:"many2many:user_events;"`
+	Name          string  `json:"name" gorm:"not null"`
+	Birthday      string  `json:"birthday" gorm:"not null"`
+	Email         string  `json:"email" gorm:"unique_index;not null"`
+	Password      string  `json:"password" gorm:"not null"`
+	Gender        string  `json:"gender" gorm:"not null"`
+	CreatedEvents []Event `gorm:"foreignkey:UserID"`
+	Events        []Event `gorm:"many2many:user_events;"`
 }
 
 func (u User) Validate() error {
@@ -34,12 +32,10 @@ func (u User) Validate() error {
 		validation.Field(
 			&u.Name,
 			validation.Required,
-			validation.Match(regexp.MustCompile("[a-zA-Z0-9]+")),
 		),
 		validation.Field(
 			&u.Birthday,
 			validation.Required,
-			validation.Date("2006-01-02"),
 		),
 		validation.Field(
 			&u.Email,

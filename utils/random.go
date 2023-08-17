@@ -17,14 +17,14 @@ func randomID() uint {
 	return uint(uuid.New().ID())
 }
 
-func randomUserGender() pb.GENDER {
+func randomUserGender() string {
 	switch rand.Intn(2) {
 	case 1:
-		return pb.GENDER_MALE
+		return "MALE"
 	case 2:
-		return pb.GENDER_FEMALE
+		return "FEMALE"
 	default:
-		return pb.GENDER_MALE
+		return "MALE"
 	}
 
 }
@@ -34,7 +34,7 @@ func randomUserName() string {
 
 }
 
-func randomPastDate() time.Time {
+func randomPastDate() string {
 	today := time.Now()
 
 	// Generate a random number of days in the past
@@ -43,10 +43,10 @@ func randomPastDate() time.Time {
 	// Calculate the random past date
 	randomDate := today.AddDate(0, 0, -randomDays)
 
-	return randomDate
+	return randomDate.String()
 }
 
-func randomFutureDate() time.Time {
+func randomFutureDate() string {
 	today := time.Now()
 
 	// Generate a random number of days in the future
@@ -55,7 +55,7 @@ func randomFutureDate() time.Time {
 	// Calculate the random future date
 	randomDate := today.AddDate(0, 0, randomDays)
 
-	return randomDate
+	return randomDate.String()
 }
 
 func randomUserEmail() string {

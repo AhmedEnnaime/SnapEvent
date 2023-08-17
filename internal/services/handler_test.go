@@ -15,8 +15,8 @@ func setUp(t *testing.T) (*Handler, func(t *testing.T)) {
 	w := zerolog.ConsoleWriter{Out: io.Discard}
 
 	l := zerolog.New(w).With().Timestamp().Logger()
-	d, err := db.NewTestDbB()
 
+	d, err := db.NewTestDbB()
 	if err != nil {
 		t.Fatal(fmt.Errorf("failed to initialize database: %w", err))
 	}

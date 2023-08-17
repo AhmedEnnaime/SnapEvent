@@ -2,14 +2,13 @@ package utils
 
 import (
 	"github.com/AhmedEnnaime/SnapEvent/pb"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func NewUser() *pb.User {
 
 	user := &pb.User{
 		Name:     randomUserName(),
-		Birthday: timestamppb.New(randomPastDate()),
+		Birthday: randomPastDate(),
 		Email:    randomUserEmail(),
 		Password: randomUserPassword(),
 		Gender:   randomUserGender(),
@@ -21,7 +20,7 @@ func NewUser() *pb.User {
 func NewEvent() *pb.Event {
 	event := &pb.Event{
 		Id:          uint32(randomID()),
-		EventDate:   timestamppb.New(randomFutureDate()),
+		EventDate:   randomFutureDate(),
 		Time:        randomEventTime(),
 		Description: randomDescription(),
 		City:        randomCity(),

@@ -2,20 +2,20 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/AhmedEnnaime/SnapEvent/internal/configs"
 	"github.com/AhmedEnnaime/SnapEvent/internal/models"
 	"github.com/BurntSushi/toml"
 	"github.com/DATA-DOG/go-txdb"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -24,18 +24,33 @@ var mutex sync.Mutex
 
 func dsn() (string, error) {
 
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH environment variable is not set")
-	}
-	configuration, err := configs.LoadConfig(configPath)
-
-	if err != nil {
-		return "Cannot load env variables", err
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		return "", errors.New("$DB_HOST is not set")
 	}
 
-	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		configuration.DbHost, configuration.DbPort, configuration.PostgresUser, configuration.PostgresPassword, configuration.PostgresDb), nil
+	user := os.Getenv("POSTGRES_USER")
+	if user == "" {
+		return "", errors.New("$POSTGRES_USER is not set")
+	}
+
+	password := os.Getenv("POSTGRES_PASSWORD")
+	if password == "" {
+		return "", errors.New("$POSTGRES_PASSWORD is not set")
+	}
+
+	name := os.Getenv("POSTGRES_DB")
+	if name == "" {
+		return "", errors.New("$POSTGRES_DB is not set")
+	}
+
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		return "", errors.New("$DB_PORT is not set")
+	}
+
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, password, name), nil
 
 }
 
@@ -67,12 +82,8 @@ func New() (*gorm.DB, error) {
 
 // For test purposes => Creating isolated db connection for testing
 func NewTestDbB() (*gorm.DB, error) {
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH environment variable is not set")
-	}
-	_, err := configs.LoadConfig(configPath)
 
+	err := godotenv.Load("../../test.env")
 	if err != nil {
 		return nil, err
 	}

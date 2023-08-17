@@ -1,20 +1,20 @@
 [[users]]
   name = "foo"
-  birthday = 2002-04-19T07:32:00
+  birthday = "2002-04-19T07:32:00"
   email = "foo@example.com"
   password = "xxxxxx"
   gender = "MALE"
 
 [[users]]
   name = "bar"
-  birthday = 1999-04-19T07:32:00
+  birthday = "1999-04-19T07:32:00"
   email = "bar@example.com"
   password = "yyyyyy"
   gender = "FEMALE"
 
 [[users]]
   name = "choo"
-  birthday = 2004-08-29T07:32:00
+  birthday = "2004-08-29T07:32:00"
   email = "cho@example.com"
   password = "zzzzzzz"
   gender = "MALE"

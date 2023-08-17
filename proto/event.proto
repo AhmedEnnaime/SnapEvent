@@ -20,7 +20,7 @@ service EventService {
 
 message Event {
   uint32 id = 1;
-  google.protobuf.Timestamp eventDate = 2;
+  string eventDate = 2;
   string time = 3;
   string description = 4;
   string city = 5;

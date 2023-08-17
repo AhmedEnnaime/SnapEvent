@@ -6,10 +6,8 @@ import (
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/models"
 	"github.com/AhmedEnnaime/SnapEvent/pb"
-	"github.com/AhmedEnnaime/SnapEvent/utils"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type UserServer struct {
@@ -25,18 +23,19 @@ func NewUserServer(h *Handler) *UserServer {
 
 func (server *UserServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.UserResponse, error) {
 	server.h.logger.Info().Interface("req", req).Msg("Create User")
+	server.h.logger.Info().Str("received_gender", req.GetGender()).Msg("Received Gender")
 
 	user := models.User{
 		Name:     req.GetName(),
-		Birthday: req.GetBirthday().AsTime(),
+		Birthday: req.GetBirthday(),
 		Email:    req.GetEmail(),
 		Password: req.GetPassword(),
-		Gender:   models.GENDER(req.GetGender().String()),
+		Gender:   req.GetGender(),
 	}
 
 	err := user.Validate()
 	if err != nil {
-		msg := "validation error"
+		msg := err.Error()
 		err = fmt.Errorf("validation error: %w", err)
 		server.h.logger.Error().Err(err).Msg(msg)
 		return nil, status.Error(codes.InvalidArgument, msg)
@@ -64,10 +63,10 @@ func (server *UserServer) CreateUser(ctx context.Context, req *pb.CreateUserRequ
 		User: &pb.User{
 			Id:       uint32(user.ID),
 			Name:     user.Name,
-			Birthday: timestamppb.New(user.Birthday),
+			Birthday: user.Birthday,
 			Email:    user.Email,
 			Password: user.Password,
-			Gender:   utils.MapModelGenderToProtoGender(user.Gender),
+			Gender:   string(user.Gender),
 		},
 	}
 	return res, nil

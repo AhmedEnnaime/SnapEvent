@@ -26,10 +26,10 @@ service UserService {
 message User {
   uint32 id = 1;
   string name = 2;
-  google.protobuf.Timestamp birthday = 3;
+  string birthday = 3;
   string email = 4;
   string password = 5;
-  GENDER gender = 6;
+  string gender = 6;
   repeated uint32 event_ids = 7;
   google.protobuf.Timestamp created_at = 8;
   google.protobuf.Timestamp updated_at = 9;
@@ -46,19 +46,19 @@ message GetUserId { uint32 id = 1; }
 
 message CreateUserRequest {
   string name = 1;
-  google.protobuf.Timestamp birthday = 2;
+  string birthday = 2;
   string email = 3;
   string password = 4;
-  GENDER gender = 5;
+  string gender = 5;
 }
 
 message UpdateUserRequest {
   uint32 id = 1;
   string name = 2;
-  google.protobuf.Timestamp birthday = 3;
+  string birthday = 3;
   string email = 4;
   string password = 5;
-  GENDER gender = 6;
+  string gender = 6;
 }
 
 message DeleteUserResponse { bool success = 1; }
@@ -79,9 +79,4 @@ message SignInUserResponse {
 message GenericResponse {
   string status = 1;
   string message = 2;
-}
-
-enum GENDER {
-  MALE = 0;
-  FEMALE = 1;
 }
