@@ -14,13 +14,32 @@ services:
     environment:
       - CONFIG_PATH=/server/
     ports:
-      - "9090:9090"
+      - "8080:8080"
     depends_on:
       - db
     volumes:
       - ./:/server
     links:
-      - db  
+      - db
+
+  client:
+    build: 
+      args:
+        - USER_ID=1000
+        - GROUP_ID=1000
+        - USERNAME=ahmed
+      context: .
+      dockerfile: Client.Dockerfile
+    container_name: snapevent_client
+    env_file:
+      - ".env"
+    environment:
+      - CONFIG_PATH=/client/
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/client
+       
   db:
     build: 
       context: .
@@ -35,9 +54,9 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - snapevent_db_volume:/var/lib/postgresql/data
+      - db_volume:/var/lib/postgresql/data
 volumes:
-  snapevent_db_volume:
+  db_volume:
     driver: local
     
  

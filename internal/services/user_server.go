@@ -71,3 +71,7 @@ func (server *UserServer) CreateUser(ctx context.Context, req *pb.CreateUserRequ
 	}
 	return res, nil
 }
+
+// func (server *UserServer) GetUserByID(ctx context.Context, req *pb.GetUserId) (*pb.UserResponse, error) {
+
+// }

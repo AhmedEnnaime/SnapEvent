@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/AhmedEnnaime/SnapEvent/internal/configs"
 	"github.com/AhmedEnnaime/SnapEvent/internal/db"
 	"github.com/jinzhu/gorm"
 )
@@ -35,16 +34,12 @@ func init() {
 
 func main() {
 
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH environment variable is not set")
+	server_addr := os.Getenv("GRPC_SERVER_ADDRESS")
+	if server_addr == "" {
+		log.Fatal("$GRPC_SERVER_ADDRESS is not set")
 	}
 
-	_, err := configs.LoadConfig(configPath)
-
-	if err != nil {
-		log.Fatal("Could not load config", err)
-	}
+	log.Printf("Listening on address %s", server_addr)
 
 	defer DB.Close()
 
