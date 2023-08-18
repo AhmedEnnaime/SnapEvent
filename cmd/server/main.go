@@ -3,13 +3,20 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"os"
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/db"
+	"github.com/AhmedEnnaime/SnapEvent/internal/services"
+	"github.com/AhmedEnnaime/SnapEvent/pb"
 	"github.com/jinzhu/gorm"
+	"google.golang.org/grpc"
 )
 
-var DB *gorm.DB
+var (
+	DB *gorm.DB
+	h  *services.Handler
+)
 
 func init() {
 
@@ -41,8 +48,18 @@ func main() {
 
 	log.Printf("Listening on address %s", server_addr)
 
-	defer DB.Close()
+	userServer := services.NewUserServer(h)
+	grpcServer := grpc.NewServer()
+	pb.RegisterUserServiceServer(grpcServer, userServer)
 
-	log.Printf("Everything OK")
+	listener, err := net.Listen("tcp", server_addr)
+	if err != nil {
+		log.Fatal("cannot start server: ", err)
+	}
+
+	err = grpcServer.Serve(listener)
+	if err != nil {
+		log.Fatal("cannot start server: ", err)
+	}
 
 }
