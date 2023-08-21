@@ -19,8 +19,8 @@ services:
       - db
     volumes:
       - ./:/server
-    links:
-      - db
+    networks:
+      - snapevent_network
 
   client:
     build: 
@@ -36,9 +36,11 @@ services:
     environment:
       - CONFIG_PATH=/client/
     ports:
-      - "8081:8081"
+      - "9090:9090"
     volumes:
       - ./:/client
+    networks:
+      - snapevent_network
        
   db:
     build: 
@@ -55,6 +57,12 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - db_volume:/var/lib/postgresql/data
+    networks:
+      - snapevent_network
+    
+networks:
+  snapevent_network:
+    driver: bridge
 volumes:
   db_volume:
     driver: local
