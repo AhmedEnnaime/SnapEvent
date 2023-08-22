@@ -23,7 +23,6 @@ func NewUserServer(h *Handler) *UserServer {
 
 func (server *UserServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.UserResponse, error) {
 	server.h.logger.Info().Interface("req", req).Msg("Create User")
-	server.h.logger.Info().Str("received_gender", req.GetGender()).Msg("Received Gender")
 
 	user := models.User{
 		Name:     req.GetName(),
@@ -70,6 +69,37 @@ func (server *UserServer) CreateUser(ctx context.Context, req *pb.CreateUserRequ
 		},
 	}
 	return res, nil
+}
+
+func (server *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest) (*pb.GetUsersResponse, error) {
+	server.h.logger.Info().Interface("req", req).Msg("Get all users")
+
+	users, err := server.h.us.GetAllUsers()
+	if err != nil {
+		server.h.logger.Error().Err(err).Msg("failed to get users from database")
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+
+	pbUsers := make([]*pb.User, 0, len(users))
+	for _, user := range users {
+		pbUser := &pb.User{
+			Id:       uint32(user.ID),
+			Name:     user.Name,
+			Birthday: user.Birthday,
+			Email:    user.Email,
+			Password: user.Password,
+			Gender:   user.Gender,
+			// Omitting other fields for brevity
+		}
+		pbUsers = append(pbUsers, pbUser)
+	}
+
+	res := &pb.GetUsersResponse{
+		Users: pbUsers,
+	}
+
+	return res, nil
+
 }
 
 // func (server *UserServer) GetUserByID(ctx context.Context, req *pb.GetUserId) (*pb.UserResponse, error) {

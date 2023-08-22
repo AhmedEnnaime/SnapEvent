@@ -115,3 +115,77 @@ func TestCreateUser(t *testing.T) {
 	}
 
 }
+
+func TestGetUsers(t *testing.T) {
+
+	t.Parallel()
+	h, cleaner := setUp(t)
+	defer cleaner(t)
+
+	users := []models.User{
+		{
+			Name:     "foo",
+			Birthday: "2000-01-31",
+			Email:    "foo@example.com",
+			Password: "secret",
+			Gender:   "MALE",
+		},
+		{
+			Name:     "bar",
+			Birthday: "2004-05-10",
+			Email:    "bar@example.com",
+			Password: "secret",
+			Gender:   "FEMALE",
+		},
+	}
+
+	// Insert the test users into the database
+	for _, user := range users {
+		if err := h.us.Create(&user); err != nil {
+			t.Fatalf("Failed to insert user into database: %v", err)
+		}
+	}
+
+	tests := []struct {
+		title    string
+		req      *pb.GetUsersRequest
+		expected []models.User
+		hasError bool
+	}{
+		{
+			"get all users: success without pagination",
+			&pb.GetUsersRequest{
+				Page:  0,
+				Limit: 0,
+			},
+			users,
+			false,
+		},
+	}
+
+	userServer := NewUserServer(h)
+
+	for _, tt := range tests {
+		c := context.Background()
+		resp, err := userServer.GetUsers(c, tt.req)
+		if (err != nil) != tt.hasError {
+			t.Errorf("%s hasError %t, but got error: %v.", tt.title, tt.hasError, err)
+			t.FailNow()
+		}
+
+		if !tt.hasError {
+			receivedUsers := resp.GetUsers()
+			if len(receivedUsers) != len(tt.expected) {
+				t.Errorf("%s: expected %d users, got %d", tt.title, len(tt.expected), len(receivedUsers))
+			}
+
+			for i, receivedUser := range receivedUsers {
+				expectedUser := tt.expected[i]
+				if receivedUser.GetEmail() != expectedUser.Email {
+					t.Errorf("%s: wrong Email for user %d, expected %q, got %q", tt.title, i, expectedUser.Email, receivedUser.GetEmail())
+				}
+			}
+		}
+	}
+
+}

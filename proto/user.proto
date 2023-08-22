@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 service UserService {
   // Advanced use when using stream, you can switch to GetUsersResponse for
   // simple usecase
-  rpc GetUsers(GetUsersRequest) returns (stream User);
+  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
 
   rpc GetUserById(GetUserId) returns (UserResponse);
 
@@ -41,6 +41,8 @@ message GetUsersRequest {
 }
 
 message UserResponse { User user = 1; }
+
+message GetUsersResponse { repeated User users = 1; }
 
 message GetUserId { uint32 id = 1; }
 
