@@ -47,3 +47,24 @@ func (userClient *UserClient) SignUp(user *pb.User) {
 	fmt.Println(res)
 
 }
+
+// func (userClient *UserClient) GetUsers(ctx context.Context, req *pb.GetUsersRequest, opts ...grpc.CallOption) ([]*pb.User, error) {
+// 	res, err := userClient.service.GetUsers(ctx, req, opts...)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to get users: %v", err)
+// 	}
+
+// 	return res.Users, nil
+// }
+
+func (userClient *UserClient) GetUserByID(args *pb.GetUserId) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(time.Millisecond*5000))
+	defer cancel()
+
+	res, err := userClient.service.GetUserById(ctx, args)
+	if err != nil {
+		log.Fatalf("GetUser: %v", err)
+	}
+
+	fmt.Println(res)
+}

@@ -3,11 +3,13 @@ package services
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/models"
 	"github.com/AhmedEnnaime/SnapEvent/pb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type UserServer struct {
@@ -102,6 +104,31 @@ func (server *UserServer) GetUsers(ctx context.Context, req *pb.GetUsersRequest)
 
 }
 
-// func (server *UserServer) GetUserByID(ctx context.Context, req *pb.GetUserId) (*pb.UserResponse, error) {
+func (server *UserServer) GetUserByID(ctx context.Context, req *pb.GetUserId) (*pb.UserResponse, error) {
+	server.h.logger.Info().Interface("req", req).Msg("get user")
 
-// }
+	userID := req.GetId()
+
+	user, err := server.h.us.GetByID(uint(userID))
+	if err != nil {
+		if strings.Contains(err.Error(), "Id exists") {
+			return nil, status.Errorf(codes.NotFound, err.Error())
+		}
+		return nil, status.Errorf(codes.Internal, err.Error())
+	}
+
+	res := &pb.UserResponse{
+		User: &pb.User{
+			Id:        uint32(user.ID),
+			Name:      user.Name,
+			Birthday:  user.Birthday,
+			Email:     user.Email,
+			Password:  user.Password,
+			Gender:    user.Gender,
+			CreatedAt: timestamppb.New(user.CreatedAt),
+			UpdatedAt: timestamppb.New(user.UpdatedAt),
+		},
+	}
+
+	return res, nil
+}

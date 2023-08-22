@@ -189,3 +189,65 @@ func TestGetUsers(t *testing.T) {
 	}
 
 }
+
+func TestGetUserById(t *testing.T) {
+	t.Parallel()
+	h, cleaner := setUp(t)
+	defer cleaner(t)
+
+	// Create a test user
+	testUser := models.User{
+		Name:     "test",
+		Birthday: "1995-08-22",
+		Email:    "test@example.com",
+		Password: "secret",
+		Gender:   "MALE",
+	}
+
+	// Insert the test user into the database
+	if err := h.us.Create(&testUser); err != nil {
+		t.Fatalf("Failed to insert user into database: %v", err)
+	}
+
+	tests := []struct {
+		title    string
+		req      *pb.GetUserId
+		expected models.User
+		hasError bool
+	}{
+		{
+			"get existing user by ID: success",
+			&pb.GetUserId{
+				Id: uint32(testUser.ID),
+			},
+			testUser,
+			false,
+		},
+		{
+			"get non-existing user by ID",
+			&pb.GetUserId{
+				Id: 9999,
+			},
+			models.User{},
+			true,
+		},
+	}
+
+	userServer := NewUserServer(h)
+
+	for _, tt := range tests {
+		c := context.Background()
+		resp, err := userServer.GetUserByID(c, tt.req)
+		if (err != nil) != tt.hasError {
+			t.Errorf("%s hasError %t, but got error: %v.", tt.title, tt.hasError, err)
+			t.FailNow()
+		}
+
+		if !tt.hasError {
+			receivedUser := resp.GetUser()
+			if receivedUser.GetEmail() != tt.expected.Email {
+				t.Errorf("%s: wrong Email, expected %q, got %q", tt.title, tt.expected.Email, receivedUser.GetEmail())
+			}
+		}
+	}
+}
