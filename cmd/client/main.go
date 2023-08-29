@@ -13,14 +13,7 @@ import (
 
 func main() {
 
-	// clientAddr := os.Getenv("CLIENT_ORIGIN")
-	// if clientAddr == "" {
-	// 	log.Fatal("$CLIENT_ORIGIN is not set")
-	// }
-
-	// log.Printf("client address: %s", clientAddr)
-
-	conn, err := grpc.Dial("server:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("server:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("cannot dial server: ", err)
 	}

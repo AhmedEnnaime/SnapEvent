@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
 	"os"
+	"os/signal"
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/db"
 	"github.com/AhmedEnnaime/SnapEvent/internal/services"
@@ -39,27 +41,43 @@ func init() {
 	fmt.Println("Connected to postgres successfully")
 }
 
-func main() {
+func RunGrpcServer(ctx context.Context) error {
 
 	server_addr := os.Getenv("GRPC_SERVER_ADDRESS")
 	if server_addr == "" {
 		log.Fatal("$GRPC_SERVER_ADDRESS is not set")
 	}
 
-	log.Printf("Listening on address %s", server_addr)
-
-	userServer := services.NewUserServer(h)
-	grpcServer := grpc.NewServer()
-	pb.RegisterUserServiceServer(grpcServer, userServer)
-
 	listener, err := net.Listen("tcp", server_addr)
 	if err != nil {
 		log.Fatal("cannot start server: ", err)
 	}
 
-	err = grpcServer.Serve(listener)
-	if err != nil {
-		log.Fatal("cannot start server: ", err)
-	}
+	userServer := services.NewUserServer(h)
+	grpcServer := grpc.NewServer()
+	pb.RegisterUserServiceServer(grpcServer, userServer)
 
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for range c {
+			// sig is a ^C, handle it
+			log.Println("shutting down gRPC server...")
+
+			grpcServer.GracefulStop()
+
+			<-ctx.Done()
+		}
+	}()
+
+	log.Println("starting gRPC server...")
+	return grpcServer.Serve(listener)
+
+}
+
+func main() {
+	ctx := context.Background()
+	if err := RunGrpcServer(ctx); err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+	}
 }
