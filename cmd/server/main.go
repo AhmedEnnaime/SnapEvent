@@ -10,8 +10,10 @@ import (
 
 	"github.com/AhmedEnnaime/SnapEvent/internal/db"
 	"github.com/AhmedEnnaime/SnapEvent/internal/services"
+	"github.com/AhmedEnnaime/SnapEvent/internal/store"
 	"github.com/AhmedEnnaime/SnapEvent/pb"
 	"github.com/jinzhu/gorm"
+	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 )
 
@@ -25,6 +27,7 @@ func init() {
 	var bug error
 
 	DB, bug = db.New()
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 
 	if DB == nil {
 		log.Fatalf("Failed to connect to the database: %v", bug) // Print detailed error message
@@ -38,17 +41,22 @@ func init() {
 		log.Fatalf("Failed to seed: %v", err)
 	}
 
+	userStore := store.NewUserStore(DB)
+	eventStore := store.NewEventStore(DB)
+
 	fmt.Println("Connected to postgres successfully")
+
+	h = services.New(&logger, userStore, eventStore)
 }
 
 func RunGrpcServer(ctx context.Context) error {
 
-	server_addr := os.Getenv("GRPC_SERVER_ADDRESS")
-	if server_addr == "" {
-		log.Fatal("$GRPC_SERVER_ADDRESS is not set")
-	}
+	// server_addr := os.Getenv("GRPC_SERVER_ADDRESS")
+	// if server_addr == "" {
+	// 	log.Fatal("$GRPC_SERVER_ADDRESS is not set")
+	// }
 
-	listener, err := net.Listen("tcp", server_addr)
+	listener, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatal("cannot start server: ", err)
 	}
